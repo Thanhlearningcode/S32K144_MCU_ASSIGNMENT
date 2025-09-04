@@ -1,118 +1,84 @@
-# CISC vs RISC — Tổng hợp chi tiết (kèm ví dụ)
+# So sánh kiến trúc CISC và RISC
+
+## 1. Giới thiệu khái niệm cơ bản
+
+### 1.1 CISC (Complex Instruction Set Computer)
+
+CISC là kiến trúc vi xử lý với tập lệnh phức tạp. Mỗi lệnh trong CISC có thể thực hiện nhiều thao tác ở mức phần cứng, ví dụ: tải dữ liệu, thực hiện phép toán, và lưu kết quả chỉ trong một lệnh. Kiến trúc này hướng đến việc giảm số lệnh của chương trình bằng cách tăng độ phức tạp của mỗi lệnh.
+
+### 1.2 RISC (Reduced Instruction Set Computer)
+
+RISC là kiến trúc vi xử lý với tập lệnh rút gọn. Mỗi lệnh thường được thiết kế để thực hiện một tác vụ đơn giản và có thời gian thực thi gần như đồng nhất (thường trong một chu kỳ xung nhịp). RISC tập trung vào hiệu quả của pipeline và tốc độ xử lý.
 
 ---
 
-## 1) Khái niệm
-- **CISC** (Complex Instruction Set Computer): Bộ lệnh **phức tạp**, **nhiều** lệnh; một lệnh có thể thực hiện **nhiều thao tác** (load + tính toán + lưu).
-- **RISC** (Reduced Instruction Set Computer): Bộ lệnh **tối giản**, **ít** lệnh; mỗi lệnh làm **một việc nhỏ**, tốc độ/chu kỳ **đều** và dễ **pipeline**.
+## 2. Ưu điểm và nhược điểm
 
-> MCU họ **ARM Cortex‑M (STM32, NXP i.MX RT, TI MSP432, v.v.)** là **RISC**. PC/laptop dùng **x86/x86‑64** (Intel/AMD) là **CISC**.
+### 2.1 CISC
 
----
+**Ưu điểm:**
 
-## 2) Điểm giống nhau
-- Đều là kiến trúc tập lệnh của CPU/MCU.
-- Cùng mục tiêu: thực thi chương trình, xử lý dữ liệu, giao tiếp bộ nhớ/ngoại vi.
-- Cùng có các khối: bộ giải mã lệnh, ALU/FPU, thanh ghi, bus, bộ nhớ lệnh & dữ liệu.
-- Đều phát triển để đạt **hiệu năng/điện năng/chi phí** tốt hơn.
+* Ít dòng lệnh trong chương trình do mỗi lệnh phức tạp hơn.
+* Dễ dàng hơn trong việc lập trình assembly ở mức thấp.
+* Phù hợp với các ứng dụng truyền thống và PC (Intel x86).
 
----
+**Nhược điểm:**
 
-## 3) Điểm khác nhau (bảng tổng hợp)
+* Mạch giải mã phức tạp, tiêu tốn nhiều transistor.
+* Khó tối ưu hóa pipeline.
+* Tốc độ mỗi lệnh không đồng nhất, ảnh hưởng đến hiệu suất.
 
-| Tiêu chí | **CISC** | **RISC** |
-|---|---|---|
-| **Kích thước & độ phức tạp lệnh** | Nhiều lệnh, lệnh **dài/biến độ dài**, giải mã **phức tạp** | Ít lệnh, lệnh **ngắn/fixed hoặc gần fixed**, giải mã **đơn giản** |
-| **Cách truy cập bộ nhớ** | Nhiều lệnh có thể **đọc/ghi trực tiếp** bộ nhớ khi tính toán | **Load/Store** thuần: chỉ lệnh load/store truy cập bộ nhớ, ALU làm việc trên **thanh ghi** |
-| **Mật độ mã (code density)** | **Cao** (ít lệnh hơn để làm cùng việc) | Thường **thấp hơn**; được cải thiện bằng **Thumb/Thumb‑2 (ARM)**, **compressed ISA (RISC‑V C)** |
-| **Chu kỳ/1 lệnh** | Thường **nhiều chu kỳ/1 lệnh** | Hướng tới **1 chu kỳ/1 lệnh** (không tuyệt đối) |
-| **Thiết kế pipeline** | Khó pipeline đều do lệnh biến độ dài & vi mã | **Dễ pipeline** nhờ lệnh đơn giản/độ dài cố định |
-| **Vi mã (microcode)** | Phổ biến (x86 dùng nhiều) | Ít hoặc không cần |
-| **Phần cứng** | Phức tạp hơn → tốn transistor, điện năng | Đơn giản hơn → dễ mở rộng lõi/điện năng thấp |
-| **Ví dụ kiến trúc** | x86/x86‑64 | ARM, RISC‑V, MIPS, SPARC (lịch sử), PowerPC (nhiều biến thể) |
-| **Miền ứng dụng** | PC, server, desktop HĐH phức tạp | Nhúng, MCU, di động, SoC tiết kiệm năng lượng |
+### 2.2 RISC
 
----
+**Ưu điểm:**
 
-## 4) Ví dụ lệnh: Nhân hai số trong bộ nhớ
+* Thiết kế đơn giản, dễ tối ưu pipeline.
+* Lệnh được thực hiện nhanh và đồng nhất.
+* Tiêu tốn ít năng lượng, phù hợp thiết bị di động.
 
-### 4.1 Cách “CISC” (ý tưởng khái quát, kiểu x86)
-Một lệnh có thể vừa **load** vừa **nhân** và có thể **store** kết quả:
-```asm
-; Giả định địa chỉ A và B ở bộ nhớ, đích ở C
-MUL_MEM C, A, B     ; (Giả sử) đọc A, B từ RAM, nhân, ghi C về RAM
-```
-> Trên thực tế x86 có nhiều biến thể lệnh; ý tưởng là **ít lệnh hơn** để hoàn thành công việc.
+**Nhược điểm:**
 
-### 4.2 Cách “RISC” (ARM Cortex‑M / RISC‑V)
-Phải **tách** thành lệnh load → tính toán → store:
-```asm
-; r0, r1, r2 là thanh ghi
-LDR   r0, [A]       ; load A từ RAM vào r0
-LDR   r1, [B]       ; load B từ RAM vào r1
-MUL   r2, r0, r1    ; r2 = r0 * r1
-STR   r2, [C]       ; store r2 về RAM
-```
-> Lệnh **đơn giản**, pipeline **đều đặn**, dễ đạt throughput cao.
+* Chương trình dài hơn do cần nhiều lệnh để hoàn thành cùng một công việc.
+* Có thể cần bộ nhớ lớn hơn.
 
 ---
 
-## 5) Pipeline minh họa (ASCII)
+## 3. So sánh CISC và RISC theo tiêu chí
 
-### RISC (5 stage điển hình)
-```
-IF → ID → EX → MEM → WB
- |     |     |     |____ Ghi kết quả
- |     |     |___________ Truy cập bộ nhớ (chỉ LOAD/STORE)
- |     |__________________ Thực thi ALU
- |________________________ Giải mã/đọc thanh ghi
-__________________________ Nạp lệnh
-```
+### 3.1 Cấu trúc tập lệnh
 
-### CISC (khái quát)
-```
-IF → Decode (phức tạp/vi mã) → {nhiều vi bước EX/MEM} → WB
-- Độ dài lệnh biến đổi → khó canh hàng pipeline
-- Thường cần vi mã chuyển 1 lệnh “to” thành nhiều micro‑ops
-```
+* **CISC:** Tập lệnh phong phú, nhiều chế độ địa chỉ phức tạp.
+* **RISC:** Tập lệnh rút gọn, đơn giản, thường dạng load/store.
 
----
+### 3.2 Tốc độ xử lý
 
-## 6) Code density & thực tế hiện đại
-- **ARM Thumb/Thumb‑2** và **RISC‑V “C” extension** cho phép **mã lệnh ngắn hơn**, giúp **tiết kiệm Flash/RAM** trên MCU → thu hẹp khoảng cách so với CISC.
-- Nhiều CPU CISC (x86) thực thi bằng cách **dịch lệnh phức tạp thành micro‑ops** nội bộ (gần giống RISC) trước khi pipeline.
+* **CISC:** Một lệnh có thể cần nhiều chu kỳ máy.
+* **RISC:** Hầu hết các lệnh hoàn thành trong một chu kỳ máy.
 
----
+### 3.3 Kích thước chương trình
 
-## 7) Ánh xạ sang MCU thực tế
-- **RISC/ARM Cortex‑M**: STM32 (ST), LPC & i.MX RT (NXP), MSP432 (TI), GD32 (GigaDevice), Nordic nRF52 (BLE), v.v.
-- **RISC‑V MCU**: ESP32‑C3/C6 (Espressif), GD32VF103, SiFive‑based SoC, v.v.
-- **TI C2000 (DSP‑enabled MCU)**: kiến trúc tối ưu **điều khiển động cơ & xử lý tín hiệu**, có **MAC**, pipeline sâu; thiên về **RISC‑like** nhưng bộ lệnh **chuyên biệt DSP** (khó xếp thuần CISC/RISC).
+* **CISC:** Kích thước chương trình nhỏ hơn do ít lệnh.
+* **RISC:** Chương trình dài hơn vì cần nhiều lệnh hơn.
+
+### 3.4 Độ phức tạp phần cứng
+
+* **CISC:** Phần cứng phức tạp, bộ giải mã lệnh lớn.
+* **RISC:** Phần cứng đơn giản, dễ mở rộng pipeline.
+
+### 3.5 Ứng dụng thực tế
+
+* **CISC:** Dùng phổ biến trong máy tính cá nhân, máy chủ (Intel x86, AMD64).
+* **RISC:** Dùng trong thiết bị nhúng, di động, IoT (ARM, MIPS, RISC-V).
 
 ---
 
-## 8) Khi nào chọn cái nào (góc nhìn embedded)
-- **MCU RISC (ARM/RISC‑V)**: tối ưu **tiêu thụ điện**, **độ trễ thấp**, **ngoại vi phong phú**, hệ sinh thái RTOS/driver đồ sộ → phù hợp **STM32, NXP, TI MCU**.
-- **CISC (x86/x64)**: phù hợp **máy tính/IPC** cần HĐH nặng (Windows/Linux đầy đủ), **điện năng cao hơn**.
+## 4. Quan điểm cá nhân
+
+Trong bối cảnh hệ thống nhúng hiện nay, **RISC** phù hợp hơn vì ưu tiên hiệu suất năng lượng, đơn giản hóa phần cứng và khả năng mở rộng. Các vi xử lý RISC như ARM và RISC-V đang thống trị lĩnh vực thiết bị di động, IoT, và nhúng nhờ tính hiệu quả và linh hoạt. CISC vẫn giữ vai trò quan trọng trong PC và máy chủ, nhưng xu hướng hệ thống nhúng hiện đại nghiêng mạnh về RISC.
 
 ---
 
-## 9) Câu hỏi phỏng vấn thường gặp (và gợi ý trả lời ngắn)
-1) **RISC có luôn nhanh hơn CISC?** — *Không*. Nhanh chậm phụ thuộc **vi kiến trúc**, xung nhịp, cache, compiler, bộ nhớ, v.v.
-2) **Load/Store nghĩa là gì?** — Chỉ **LOAD/STORE** được phép truy cập RAM; lệnh ALU chỉ thao tác trên **thanh ghi**.
-3) **Vì sao RISC dễ pipeline?** — Lệnh **đơn giản, độ dài cố định**, đường dữ liệu **đều** → chia stage rõ ràng.
-4) **Code RISC dài hơn, có tệ không?** — Thumb/Thumb‑2 và nén lệnh giúp **giảm kích thước**; bù lại được **điện năng thấp & throughput tốt**.
+## 5. Kết luận
 
----
-
-## 10) Tài liệu gợi ý tự đọc thêm
-- ARM Architecture Reference Manual (ARMv7‑M, ARMv8‑M)
-- RISC‑V Unprivileged/Privileged Spec
-- Agner Fog microarchitecture & optimization guides (x86)
-- “Computer Architecture: A Quantitative Approach” — Hennessy & Patterson
-
----
-
-### Ghi chú nhanh để bỏ túi
-- **CISC**: *ít lệnh, lệnh to, code gọn, decode khó*.
-- **RISC**: *nhiều lệnh nhỏ, code có thể dài hơn, pipeline dễ, tiết kiệm điện*.
+* CISC và RISC có các điểm mạnh riêng: CISC tối ưu về số lượng lệnh, RISC tối ưu về tốc độ và năng lượng.
+* Lựa chọn kiến trúc tùy thuộc vào ứng dụng. Với các hệ thống nhúng cần tiết kiệm năng lượng, **RISC** là lựa chọn tối ưu.
