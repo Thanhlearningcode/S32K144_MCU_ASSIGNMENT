@@ -1,4 +1,4 @@
-#include "PCC.h"
+#include <Pcc.h>
 
 PCC_status configure_ClockPort (PCC_PortIndex port_index)
 {

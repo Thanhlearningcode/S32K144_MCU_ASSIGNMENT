@@ -1,5 +1,5 @@
 -c
--I"D:/Embedded/Embedded_FULL_APHONG/S32K1/Code/Test/Blinkled/include"
+-I"D:/Embedded/Embedded_FULL_APHONG/S32K1/Homework/S32K144_MCU_ASSIGNMENT/Homework2/Blinkled/include"
 -x assembler-with-cpp
 -DSTART_FROM_FLASH
 -g3

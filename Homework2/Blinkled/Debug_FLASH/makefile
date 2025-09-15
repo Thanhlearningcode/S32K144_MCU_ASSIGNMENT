@@ -31,7 +31,7 @@ Blinkled.siz \
 all: Blinkled.elf secondary-outputs
 
 # Tool invocations
-Blinkled.elf: $(OBJS) D:/Embedded/Embedded_FULL_APHONG/S32K1/Code/Test/Blinkled/Project_Settings/Linker_Files/S32K144_64_flash.ld $(USER_OBJS)
+Blinkled.elf: $(OBJS) D:/Embedded/Embedded_FULL_APHONG/S32K1/Homework/S32K144_MCU_ASSIGNMENT/Homework2/Blinkled/Project_Settings/Linker_Files/S32K144_64_flash.ld $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Standard S32DS C Linker'
 	arm-none-eabi-gcc -o "Blinkled.elf" "@Blinkled.args"  $(USER_OBJS) $(LIBS)
