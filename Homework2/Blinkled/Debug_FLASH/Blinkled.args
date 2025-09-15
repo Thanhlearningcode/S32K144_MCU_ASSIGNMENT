@@ -1,0 +1,17 @@
+-T
+"D:/Embedded/Embedded_FULL_APHONG/S32K1/Code/Test/Blinkled/Project_Settings/Linker_Files/S32K144_64_flash.ld"
+-Wl,-Map,"Blinkled.map"
+-Xlinker
+--gc-sections
+-n
+-mcpu=cortex-m4
+-specs=rdimon.specs
+"./Project_Settings/Startup_Code/startup.o"
+"./Project_Settings/Startup_Code/startup_S32K144.o"
+"./Project_Settings/Startup_Code/system_S32K144.o"
+"./src/Application_BlinkLed.o"
+"./src/PCC.o"
+"./src/Port.o"
+"./src/main.o"
+"./src/DesignPattern/Builder/PCC_builder.o"
+"./src/DesignPattern/Builder/Port_builder.o"
