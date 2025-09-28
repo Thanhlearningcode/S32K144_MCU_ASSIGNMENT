@@ -240,8 +240,8 @@ void PORTC_IRQHandler(void)
         s_btn1Edge = 1U;
     }
 
-    if (isf13 != 0U
-    		) {
+    if (isf13 != 0U)
+    {
         BTN2_PORT->PCR[BTN2_PIN] |= PORT_PCR_ISF_MASK;
         s_btn2Edge = 1U;
     }
@@ -282,11 +282,10 @@ int main(void)
     /* Nếu cả PORTC_IRQn lẫn PORTC_PORTD_IRQn đều không có, cần kiểm tra lại tên IRQ trong device header */
 #endif
 
-    /* Xóa cờ treo nếu có */
     BTN1_PORT->PCR[BTN1_PIN] |= PORT_PCR_ISF_MASK;
     BTN2_PORT->PCR[BTN2_PIN] |= PORT_PCR_ISF_MASK;
 
-    for (;;)
+    while(1)
     {
         if (s_btn1Edge != 0U)
         {
@@ -306,9 +305,7 @@ int main(void)
             }
         }
 
-        __NOP();
     }
 
-    /* không tới đây */
     return 0;
 }
