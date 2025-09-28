@@ -120,17 +120,28 @@ static volatile uint8_t s_btn2Edge = 0U;
 
 static void BOARD_EnablePortClock(PORT_Type *port)
 {
-    if (port == PORTA) {
+    if (port == PORTA)
+    {
         PCC->PCCn[PCC_PORTA_INDEX] |= PCC_PCCn_CGC_MASK;
-    } else if (port == PORTB) {
+    }
+    else if (port == PORTB)
+    {
         PCC->PCCn[PCC_PORTB_INDEX] |= PCC_PCCn_CGC_MASK;
-    } else if (port == PORTC) {
+    }
+    else if (port == PORTC)
+    {
         PCC->PCCn[PCC_PORTC_INDEX] |= PCC_PCCn_CGC_MASK;
-    } else if (port == PORTD) {
+    }
+    else if (port == PORTD)
+    {
         PCC->PCCn[PCC_PORTD_INDEX] |= PCC_PCCn_CGC_MASK;
-    } else if (port == PORTE) {
+    }
+    else if (port == PORTE)
+    {
         PCC->PCCn[PCC_PORTE_INDEX] |= PCC_PCCn_CGC_MASK;
-    } else {
+    }
+    else
+    {
         /* no-op */
     }
     return;
@@ -142,13 +153,15 @@ static void PORT_ConfigAsGPIO(PORT_Type *port, uint32_t pin, uint8_t pullUpEnabl
     uint32_t pcr;
     pcr = 0U;
 
-    if (pullUpEnable != 0U) {
+    if (pullUpEnable != 0U)
+    {
         pcr |= PORT_PCR_PE_MASK | PORT_PCR_PS_MASK; /* pull-up */
     }
 
     pcr |= PORT_PCR_MUX(1U); /* ALT1 = GPIO */
 
-    if (irqFalling != 0U) {
+    if (irqFalling != 0U)
+    {
         pcr |= PORT_PCR_IRQC(10U); /* IRQC=10: falling edge */
     }
 
@@ -158,9 +171,12 @@ static void PORT_ConfigAsGPIO(PORT_Type *port, uint32_t pin, uint8_t pullUpEnabl
 
 static void GPIO_SetDir(GPIO_Type *gpio, uint32_t pin, uint8_t output)
 {
-    if (output != 0U) {
+    if (output != 0U)
+    {
         gpio->PDDR |= (1UL << pin);
-    } else {
+    }
+    else
+    {
         gpio->PDDR &= ~(1UL << pin);
     }
     return;
@@ -168,9 +184,12 @@ static void GPIO_SetDir(GPIO_Type *gpio, uint32_t pin, uint8_t output)
 
 static void GPIO_Write(GPIO_Type *gpio, uint32_t pin, uint8_t value)
 {
-    if (value != 0U) {
+    if (value != 0U
+    		) {
         gpio->PSOR = (1UL << pin);
-    } else {
+    }
+    else
+    {
         gpio->PCOR = (1UL << pin);
     }
     return;
@@ -215,12 +234,14 @@ void PORTC_IRQHandler(void)
     isf12 = (BTN1_PORT->PCR[BTN1_PIN] & PORT_PCR_ISF_MASK);
     isf13 = (BTN2_PORT->PCR[BTN2_PIN] & PORT_PCR_ISF_MASK);
 
-    if (isf12 != 0U) {
+    if (isf12 != 0U)
+    {
         BTN1_PORT->PCR[BTN1_PIN] |= PORT_PCR_ISF_MASK;
         s_btn1Edge = 1U;
     }
 
-    if (isf13 != 0U) {
+    if (isf13 != 0U
+    		) {
         BTN2_PORT->PCR[BTN2_PIN] |= PORT_PCR_ISF_MASK;
         s_btn2Edge = 1U;
     }
@@ -265,18 +286,22 @@ int main(void)
     BTN1_PORT->PCR[BTN1_PIN] |= PORT_PCR_ISF_MASK;
     BTN2_PORT->PCR[BTN2_PIN] |= PORT_PCR_ISF_MASK;
 
-    /* Vòng chính: xử lý cờ sự kiện, không delay */
-    for (;;) {
-        if (s_btn1Edge != 0U) {
+    for (;;)
+    {
+        if (s_btn1Edge != 0U)
+        {
             s_btn1Edge = 0U;
-            if (APP_ButtonPressed(BTN1_GPIO, BTN1_PIN) != 0U) {
+            if (APP_ButtonPressed(BTN1_GPIO, BTN1_PIN) != 0U)
+            {
                 GPIO_Toggle(LED_RED_GPIO, LED_RED_PIN);
             }
         }
 
-        if (s_btn2Edge != 0U) {
+        if (s_btn2Edge != 0U)
+        {
             s_btn2Edge = 0U;
-            if (APP_ButtonPressed(BTN2_GPIO, BTN2_PIN) != 0U) {
+            if (APP_ButtonPressed(BTN2_GPIO, BTN2_PIN) != 0U)
+            {
                 GPIO_Toggle(LED_GREEN_GPIO, LED_GREEN_PIN);
             }
         }
