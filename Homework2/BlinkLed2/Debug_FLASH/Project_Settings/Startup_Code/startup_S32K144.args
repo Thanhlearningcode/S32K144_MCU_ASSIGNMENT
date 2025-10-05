@@ -1,0 +1,7 @@
+-c
+-I"D:/Embedded/Embedded_FULL_APHONG/S32K1/Homework/Update/HW2/Bt2/BlinkLed2/include"
+-x assembler-with-cpp
+-DSTART_FROM_FLASH
+-g3
+-mcpu=cortex-m4
+-specs=rdimon.specs
