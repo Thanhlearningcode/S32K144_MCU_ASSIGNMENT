@@ -1,4 +1,3 @@
-/* Flash interface abstraction (stub for S32K144) */
 #ifndef FLASH_IF_H
 #define FLASH_IF_H
 

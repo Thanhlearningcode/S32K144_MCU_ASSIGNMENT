@@ -1,4 +1,3 @@
-/* Simple CRC32 implementation (Polynomial 0x04C11DB7) */
 #ifndef BOOT_CRC_H
 #define BOOT_CRC_H
 

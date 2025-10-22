@@ -1,4 +1,3 @@
-/* Communication abstraction (Mock UART download) */
 #ifndef BOOT_COMM_H
 #define BOOT_COMM_H
 
